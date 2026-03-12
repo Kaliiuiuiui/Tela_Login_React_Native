@@ -1,0 +1,84 @@
+import React, { useState } from 'react';
+import { View , Text, TextInput, StyleSheet, Button } from 'react-native';
+
+export default function App() {
+
+  const [login, setLogin] = useState('');
+  const [senha, setSenha] = useState('');
+  const [mensagem, setMensagem] = useState('');
+  const [tela, setTela] = useState('');
+
+
+  function validarLogin() {
+    setMensagem('');
+    if (login === 'admin' && senha === '123') {
+
+      setTela('mudar');
+    } else {
+      setMensagem('Login ou senha incorretos!');
+    }
+  }
+
+  function voltarTela(){
+    setTela('');
+    setLogin('');
+    setSenha('');
+    setMensagem('')
+  }
+
+  if (tela === 'mudar') {
+    return(
+    <View style={styles.container}>
+    <Text style={styles.titulo}>Mudou a tela!</Text>
+    <Button title="Voltar" style={styles.botao} onPress={voltarTela} />
+    </View>
+  );
+
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Tela de Login</Text>
+
+      <Text>Login:</Text>
+      <TextInput style={styles.input} placeholder="Digite seu nome" onChangeText={setLogin}/>
+
+      <Text>Senha:</Text>
+      <TextInput style={styles.input} placeholder="Digite sua senha" onChangeText={setSenha}/>
+
+      <Button title="Entrar" style={styles.botao} onPress={validarLogin} />
+
+      <Text>{mensagem}</Text>
+
+    </View>
+  );
+
+}
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    backgroundColor: "#4CAF50",
+    flex: 1,
+    justifyContent: "center",
+  },
+
+  titulo:{
+    fontSize: 25,
+    color: "#0000CD",
+  },
+
+  input: {
+    textAlign: "center",
+    borderWidth: 1,
+    borderRadius: 8,
+    color: "grey",
+    backgroundColor: "yellow",
+    marginBottom: 8,
+    padding:5,
+  },
+
+  botao: {
+  }
+
+});
