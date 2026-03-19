@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View , Text, TextInput, StyleSheet, Button } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity } from 'react-native';
 
 export default function App() {
 
@@ -7,65 +7,153 @@ export default function App() {
   const [senha, setSenha] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [tela, setTela] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
+  const [alunos, setAlunos] = useState([]);
+  const [nome, setNome] = useState('');
+  const [idade, setIdade] = useState('');
+  const [curso, setCurso] = useState('');
 
   function validarLogin() {
     setMensagem('');
-    if (login === 'admin' && senha === '123') {
 
+    if (login === 'admin' && senha === '123') {
       setTela('mudar');
     } else {
       setMensagem('Login ou senha incorretos!');
     }
   }
 
+  function cadastrarAluno() {
+
+    if (nome.trim() === '' || idade.trim() === '' || curso.trim() === '') {
+      setMensagem('Preencha todos os campos!');
+      return;
+    }
+
+    const novoAluno = {
+      nome,
+      idade,
+      curso 
+    };
+
+    setAlunos([...alunos, novoAluno]);
+
+    setNome('');
+    setIdade('');
+    setCurso('');
+    setMensagem('');
+  }
+
   function voltarTela(){
     setTela('');
     setLogin('');
     setSenha('');
-    setMensagem('')
+    setMensagem('');
   }
 
   if (tela === 'mudar') {
     return(
-    <View style={styles.container}>
-    <Text style={styles.titulo}>Mudou a tela!</Text>
-    <Button title="Voltar" style={styles.botao} onPress={voltarTela} />
-    </View>
-  );
+      <View style={styles.container}>
+        <Text style={styles.titulo}>Cadastro de Alunos</Text>
 
+        <Text style={styles.texto}>Nome:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite o nome do aluno"
+          onChangeText={setNome}
+          value={nome}
+        />
+
+        <Text style={styles.texto}>Idade:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite a idade do aluno"
+          onChangeText={setIdade}
+          value={idade}
+          keyboardType="numeric"
+        />
+
+        <Text style={styles.texto}>Curso:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite o curso do aluno"
+          onChangeText={setCurso}
+          value={curso}
+        />
+
+        <Button title="Cadastrar aluno" onPress={cadastrarAluno} />
+
+        <View style={{ marginVertical: 10 }} />
+
+        {alunos.map((aluno, index) => (
+          <View key={index}>
+            <Text style={styles.texto}>Nome: {aluno.nome}</Text>
+            <Text style={styles.texto}>Idade: {aluno.idade}</Text>
+            <Text style={styles.texto}>Curso: {aluno.curso}</Text>
+            <Text style={styles.texto}>....................</Text>
+          </View>
+        ))}
+
+        <Button title="Voltar" onPress={voltarTela} />
+
+        <Text style={{ color: 'white', marginTop: 10 }}>{mensagem}</Text>
+
+      </View>
+    );
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Tela de Login</Text>
 
-      <Text>Login:</Text>
-      <TextInput style={styles.input} placeholder="Digite seu nome" onChangeText={setLogin}/>
+      <Text style={styles.texto}>Login:</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Digite seu nome"
+        onChangeText={setLogin}
+        value={login}
+      />
 
-      <Text>Senha:</Text>
-      <TextInput style={styles.input} placeholder="Digite sua senha" onChangeText={setSenha}/>
+      <Text style={styles.texto}>Senha:</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Digite sua senha"
+        onChangeText={setSenha}
+        value={senha}
+        secureTextEntry={!mostrarSenha}
+      />
 
-      <Button title="Entrar" style={styles.botao} onPress={validarLogin} />
+      <TouchableOpacity onPress={() => setMostrarSenha(!mostrarSenha)}>
+        <Text style={{ color: 'white', marginBottom: 10 }}>
+          {mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+        </Text>
+      </TouchableOpacity>
 
-      <Text>{mensagem}</Text>
+      <Button title="Entrar" onPress={validarLogin} />
+
+      <Text style={{ color: 'white', marginTop: 10 }}>{mensagem}</Text>
 
     </View>
   );
-
 }
 
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#383838",
     flex: 1,
     justifyContent: "center",
   },
 
   titulo:{
     fontSize: 25,
-    color: "#0000CD",
+    color: "#ffffff",
+    margin: 15,
+  },
+
+  texto: {
+    color: "#ffffff"
   },
 
   input: {
@@ -73,12 +161,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     color: "grey",
-    backgroundColor: "yellow",
-    marginBottom: 8,
+    backgroundColor: "#ffffff",
+    marginBottom: 15,
     padding:5,
-  },
-
-  botao: {
+    width: 200
   }
-
 });
