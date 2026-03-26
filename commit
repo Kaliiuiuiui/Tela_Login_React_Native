@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity, ScrollView } from 'react-native';
 
 export default function App() {
 
@@ -13,6 +13,8 @@ export default function App() {
   const [nome, setNome] = useState('');
   const [idade, setIdade] = useState('');
   const [curso, setCurso] = useState('');
+
+  const [indiceEdicao, setIndiceEdicao] = useState (null);
 
   function validarLogin() {
     setMensagem('');
@@ -52,6 +54,26 @@ export default function App() {
     setMensagem('');
   }
 
+  function atualizarAluno() {
+    const novaLista = [...alunos];
+    novaLista[indiceEdicao] = {nome, idade, curso};
+    setAlunos(novaLista);
+
+    setIndiceEdicao(null);
+    setNome('');
+    setIdade('');
+    setCurso('');
+
+  }
+
+  function editarAluno(index) {
+    const aluno = alunos[index];
+    setNome(aluno.nome);
+    setIdade(aluno.idade);
+    setCurso(aluno.curso);
+    setIndiceEdicao(index);
+  } 
+
   if (tela === 'mudar') {
     return(
       <View style={styles.container}>
@@ -82,18 +104,26 @@ export default function App() {
           value={curso}
         />
 
-        <Button title="Cadastrar aluno" onPress={cadastrarAluno} />
+        {
+          indiceEdicao === null ? (<Button title="Cadastrar aluno" onPress={cadastrarAluno} />) :
+
+          (<Button title="editar" onPress={atualizarAluno}/>)
+
+        }        
 
         <View style={{ marginVertical: 10 }} />
 
+        <ScrollView>
         {alunos.map((aluno, index) => (
           <View key={index}>
             <Text style={styles.texto}>Nome: {aluno.nome}</Text>
             <Text style={styles.texto}>Idade: {aluno.idade}</Text>
             <Text style={styles.texto}>Curso: {aluno.curso}</Text>
-            <Text style={styles.texto}>....................</Text>
+            <Button title="editar" onPress={() => editarAluno(index)}/>
+            <Text style={styles.texto}>....................</Text>       
           </View>
         ))}
+        </ScrollView>
 
         <Button title="Voltar" onPress={voltarTela} />
 
