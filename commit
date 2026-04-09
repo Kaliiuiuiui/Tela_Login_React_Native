@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+
+function Botao({ titulo, onPress, cor = "#4CAF50" }) {
+  return (
+    <TouchableOpacity onPress={onPress} style={[styles.botao, { backgroundColor: cor }]}>
+      <Text style={styles.textoBotao}>{titulo}</Text>
+    </TouchableOpacity>
+  );
+}
 
 export default function App() {
 
@@ -79,56 +87,38 @@ export default function App() {
         <Text style={styles.titulo}>Cadastro de Alunos</Text>
 
         <Text style={styles.texto}>Nome:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite o nome do aluno"
-          onChangeText={setNome}
-          value={nome}
-        />
+        <TextInput style={styles.input} placeholder="Digite o nome" onChangeText={setNome} value={nome} />
 
         <Text style={styles.texto}>Idade:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite a idade do aluno"
-          onChangeText={setIdade}
-          value={idade}
-          keyboardType="numeric"
-        />
+        <TextInput style={styles.input} placeholder="Digite a idade" onChangeText={setIdade} value={idade} keyboardType="numeric" />
 
         <Text style={styles.texto}>Curso:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite o curso do aluno"
-          onChangeText={setCurso}
-          value={curso}
-        />
+        <TextInput style={styles.input} placeholder="Digite o curso" onChangeText={setCurso} value={curso} />
 
         {
           indiceEdicao === null ? (
-            <Button title="Cadastrar aluno" onPress={cadastrarAluno} />
+            <Botao titulo="Cadastrar aluno" onPress={cadastrarAluno} />
           ) : (
-            <Button title="Salvar edição" onPress={atualizarAluno} />
+            <Botao titulo="Salvar edição" onPress={atualizarAluno} cor="#2196F3" />
           )
         }
 
-        <View style={{ marginVertical: 10 }} />
-
-        <ScrollView>
+        <ScrollView style={{ marginTop: 10 }}>
           {alunos.map((aluno, index) => (
             <View key={index}>
               <Text style={styles.texto}>Nome: {aluno.nome}</Text>
               <Text style={styles.texto}>Idade: {aluno.idade}</Text>
               <Text style={styles.texto}>Curso: {aluno.curso}</Text>
 
-              <Button title="Editar" onPress={() => editarAluno(index)} />
-              <Button title="Excluir" onPress={() => removerAluno(index)} />
+              <Botao titulo="Editar" onPress={() => editarAluno(index)} cor="#FFC107" />
+              <Botao titulo="Excluir" onPress={() => removerAluno(index)} cor="#F44336" />
 
-              <Text style={styles.texto}>....................</Text>
+              <Text style={styles.texto}>--------------------</Text>
             </View>
           ))}
         </ScrollView>
 
-        <Button title="Voltar" onPress={voltarTela} />
+        <Botao titulo="Voltar" onPress={voltarTela} cor="#9E9E9E" />
 
         <Text style={{ color: 'white', marginTop: 10 }}>{mensagem}</Text>
       </View>
@@ -140,12 +130,7 @@ export default function App() {
       <Text style={styles.titulo}>Tela de Login</Text>
 
       <Text style={styles.texto}>Login:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Digite seu nome"
-        onChangeText={setLogin}
-        value={login}
-      />
+      <TextInput style={styles.input} placeholder="Digite seu nome" onChangeText={setLogin} value={login} />
 
       <Text style={styles.texto}>Senha:</Text>
       <TextInput
@@ -162,7 +147,7 @@ export default function App() {
         </Text>
       </TouchableOpacity>
 
-      <Button title="Entrar" onPress={validarLogin} />
+      <Botao titulo="Entrar" onPress={validarLogin} />
 
       <Text style={{ color: 'white', marginTop: 10 }}>{mensagem}</Text>
     </View>
@@ -196,6 +181,20 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 5,
     width: 200
-  }
+  },
 
+  botao: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginVertical: 5,
+    alignItems: "center",
+    width: 200,
+  },
+
+  textoBotao: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  }
 });
